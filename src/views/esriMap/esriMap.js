@@ -147,6 +147,7 @@ export const createMap = function (esriLoader, options, self) {
       visible: true,
       title:"小班图层",
       popupTemplate: popupTemplate,
+      definitionExpression: self.$store.getters.definitionExpression,
       renderer:{
         type: "simple", 
         symbol: {
@@ -275,8 +276,13 @@ export const createMap = function (esriLoader, options, self) {
 
     self.view.when(function(){
       self.taskSelectorParam.visible = true //任务查询可见
+      
     });
 
+    self.xbLayer.when(()=>{
+      self.view.goTo(self.xbLayer.fullExtent);
+      // self.view.extent = self.xbLayer.fullExtent;
+    })
 
     function GHTb(Id){
       self.expandTableParam.visible = !self.expandTableParam.visible;

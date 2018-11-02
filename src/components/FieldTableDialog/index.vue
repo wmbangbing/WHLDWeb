@@ -19,8 +19,8 @@
   </el-dialog>   
 </template>
 <script>
-import { getList } from '@/api/FieldBlock'
-import { getMPData } from '@/api/MonitoringPoint'
+import { getList } from '@/api/fieldBlock'
+import { getMPData } from '@/api/monitoringPoint'
 
 
 export default {

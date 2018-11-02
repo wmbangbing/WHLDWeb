@@ -13,8 +13,8 @@ import pivottable from 'pivottable'
 import d3 from 'd3'
 import c3 from 'c3'
 import {c3_renderers} from "./c3_renderers"
-import { getList } from '@/api/FieldBlock'
-import { getMPData } from '@/api/MonitoringPoint'
+import { getList } from '@/api/fieldBlock'
+import { getMPData } from '@/api/monitoringPoint'
 
 
 

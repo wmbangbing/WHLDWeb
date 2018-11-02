@@ -11,7 +11,7 @@
 
 </template>
 <script>
-import { getFormData } from '@/api/FormData'
+import { getFormData } from '@/api/formData'
 
 
 export default {

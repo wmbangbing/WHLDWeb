@@ -18,7 +18,7 @@
 </template>
 <script>
 import axios from "axios"
-import { getList } from '@/api/FieldBlock'
+import { getList } from '@/api/fieldBlock'
 
 export default {
   data() {

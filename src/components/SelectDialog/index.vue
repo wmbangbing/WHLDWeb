@@ -46,7 +46,7 @@
 <script>
 
 import axios from "axios"
-import { getMPData } from '@/api/MonitoringPoint'
+import { getMPData } from '@/api/monitoringPoint'
 
 
 export default {

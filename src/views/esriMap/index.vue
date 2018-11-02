@@ -23,8 +23,10 @@ import FieldTableDialog from '@/components/FieldTableDialog'
 import TaskSelector from '@/components/TaskSelector' 
 import ExpandTable from '@/components/ExpandTable' 
 import {createMap} from "./esriMap"
-import { getMPData } from '@/api/MonitoringPoint'
+import { getMPData } from '@/api/monitoringPoint'
 import { unique } from '@/utils/filterData'
+// import store from './store'
+
 
 
 export default  {
@@ -71,7 +73,7 @@ export default  {
     TaskSelector,
     ExpandTable
   },
-  mounted(){    
+  mounted(){      
     var self = this;
     this.initMap(self);
   },

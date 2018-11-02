@@ -18,6 +18,8 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) {
         store.dispatch('GetUserInfo').then(res => { // 拉取用户信息
+          const roles = res.data[0].Remark;
+          store.dispatch('setxbLayerDefinition',roles); //根据用户权限设置可见区域
           next()
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {

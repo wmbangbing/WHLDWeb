@@ -49,7 +49,7 @@
 </template>
 <script>
 import axios from "axios"
-import { getFormData } from '@/api/FormData'
+import { getFormData } from '@/api/formData'
 import { fadeOut,fadeIn } from '@/utils/style'
 
 
