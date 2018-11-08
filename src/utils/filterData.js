@@ -45,3 +45,19 @@ export function ArrayToObj(objArr){
   }
   return result;
 }
+
+//数据过滤，保留一级属性
+export function filterData(jsonData){
+  for(let data in jsonData){
+    console.log(jsonData[data]);
+    
+  }
+}
+class data{
+  constructor(XBH, XBMJ,QU,CUN) {
+    this.小班号 = XBH;
+    this.小班面积 = XBMJ;
+    this.区 = QU;
+    this.村 = CUN;
+  }
+}

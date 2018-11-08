@@ -3,6 +3,7 @@ export const createMap = function (esriLoader, options, self) {
     [
       'esri/Map',
       "esri/Basemap",
+      "esri/Viewpoint",
       'esri/views/MapView',
       "esri/layers/FeatureLayer",
       "esri/layers/WebTileLayer",
@@ -20,6 +21,7 @@ export const createMap = function (esriLoader, options, self) {
     ([
       Map,
       Basemap,
+      Viewpoint,
       MapView,
       FeatureLayer,
       WebTileLayer,
@@ -259,6 +261,41 @@ export const createMap = function (esriLoader, options, self) {
     });
 
     function defineActions(event) {
+      let item = event.item;    
+      
+      switch(item.title){
+        case "小班图层":
+        item.actionsSections = [
+          [{
+            title: "缩放到图层",
+            className: "esri-icon-zoom-out-fixed",
+            id: "full-extent"
+          }, {
+            title: "图层信息",
+            className: "esri-icon-description",
+            id: "information"
+          }],
+          [{
+            title: "提高透明度",
+            className: "esri-icon-up",
+            id: "increase-opacity"
+          }, {
+            title: "降低透明度",
+            className: "esri-icon-down",
+            id: "decrease-opacity"
+          }],
+          [{
+            title: "属性列表",
+            className: "esri-icon-table",
+            id: "field"
+          },{
+            title: "分析图表",
+            className: "esri-icon-table",
+            id: "pivot"
+          }]
+        ]
+        break;       
+      }
     }
     
     const exp = new Expand({
@@ -276,16 +313,51 @@ export const createMap = function (esriLoader, options, self) {
 
     self.view.when(function(){
       self.taskSelectorParam.visible = true //任务查询可见
-      
+
+      layerList.on("trigger-action", function(event) {
+        var layer = event.item.layer; //被选图层
+        var id = event.action.id;     //被选操作
+
+        if (id === "full-extent") {
+          self.view.goTo(layer.fullExtent);
+        } else if (id === "information") {
+          window.open(layer.url);
+        } else if (id === "increase-opacity") {
+          if (layer.opacity > 0) {
+            layer.opacity -= 0.25;
+          }
+        } else if (id === "decrease-opacity"){
+          if (layer.opacity < 1) {
+            layer.opacity += 0.25;
+          }
+        } else if (id === "field"){
+          self.fieldTableParam.visible = !self.fieldTableParam.visible;
+        } else if (id === "pivot"){
+          self.pivottableParam.visible = !self.pivottableParam.visible;
+        }
+      })
     });
 
     self.xbLayer.when(()=>{
       self.view.goTo(self.xbLayer.fullExtent);
-      // self.view.extent = self.xbLayer.fullExtent;
+
+      const homeWidget = new Home({
+        view: self.view,
+        viewpoint:new Viewpoint({
+          targetGeometry:self.xbLayer.fullExtent
+        })
+      });
+
+      self.view.ui.add([{
+        component: homeWidget,
+        position: "top-left",
+        index: 1
+      }])
     })
 
     function GHTb(Id){
       self.expandTableParam.visible = !self.expandTableParam.visible;
+      self.expandTableParam.task = null;   
       self.expandTableParam.XBId = Id;
     }
 
@@ -313,7 +385,10 @@ export const createMap = function (esriLoader, options, self) {
     });
 
     const compass = new Compass({
-      view: self.view
+      view: self.view,
+      viewpoint:new Viewpoint({
+        targetGeometry: self.xbLayer.fullExtent
+      })
     })
 
     const print = new Print({
@@ -357,11 +432,7 @@ export const createMap = function (esriLoader, options, self) {
         position: "top-right",
         index: 2
       },
-      {
-        component: homeWidget,
-        position: "top-left",
-        index: 1
-      },{
+     {
         component: compass,
         position: "top-left",
         index: 2
@@ -375,6 +446,11 @@ export const createMap = function (esriLoader, options, self) {
         index: 3
       },{
         component: expandTb,
+        position: "bottom-left",
+        // index: 4
+      },
+      {
+        component: fieldTb,
         position: "bottom-left",
         // index: 4
       }

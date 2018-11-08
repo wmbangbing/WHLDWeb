@@ -3,6 +3,7 @@
   <div class="" style="width:150px;" v-if="visible">
     <el-cascader
       :options="options"
+      filterable
       @change="handleChange">
     ></el-cascader>
   </div>

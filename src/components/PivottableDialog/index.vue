@@ -1,9 +1,10 @@
 <template>
   <el-dialog
+    title="分析图表"
     :visible="visible"
     @close='closeDialog'
     width="90%">
-    <div id="table"></div>
+    <el-scrollbar style="height:100%;"><div id="table" style="height:600px;"></div></el-scrollbar>   
   </el-dialog>
 </template>
 <script>
@@ -13,11 +14,7 @@ import pivottable from 'pivottable'
 import d3 from 'd3'
 import c3 from 'c3'
 import {c3_renderers} from "./c3_renderers"
-import { getList } from '@/api/fieldBlock'
-import { getMPData } from '@/api/monitoringPoint'
-
-
-
+import { getFormData } from '@/api/formData'
 
 export default{
   data(){
@@ -29,15 +26,16 @@ export default{
   watch:{
     "pivottableParam.visible":function(curVal,oldVal){
       this.visible = true;
-      if(this.pivottableParam.id === "pivotTableDK"){
-        this.$nextTick(function () {
-          this.initPivottable(getList)    
-        })
-      }else{
-        this.$nextTick(function () {
-          this.initPivottable(getMPData)    
-        })
-      }  
+      // if(this.pivottableParam.id === "pivotTableDK"){
+      //   this.$nextTick(function () {
+      //     this.initPivottable(getList)    
+      //   })
+      // }else{
+      //   this.$nextTick(function () {
+      //     this.initPivottable(getFormData)    
+      //   })
+      // }  
+      this.initPivottable(getFormData)    
     }
   },
   props:["pivottableParam"],
@@ -50,9 +48,8 @@ export default{
       this.visible = false;
     },
     initPivottable(fct){
-
       var self = this;
-      fct().then(response => {
+      fct("XBInfo").then(response => {
         console.log(response)
         $("#table").pivotUI(
           response.data,{
@@ -66,9 +63,16 @@ export default{
 }
 </script>
 <style>
-@import url("https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.20.0/pivot.min.css");
-#table{
-  height: 100vc; 
+.el-dialog{
+  display:flex;
+  flex-direction:column;
+  max-height:calc(100% - 200px);
+  max-width:calc(100% - 200px);
 }
+
+.el-dialog > .el-dialog__body{
+  overflow:auto
+}   
+@import url("https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.20.0/pivot.min.css");
 </style>
 

@@ -1,56 +1,281 @@
-<template >
-  <div class="FieldTable" >
-     <el-table
-        v-if="visible"
-        v-loading="loading"
-        :data="tableData"
-        size="mini"
-        height="200"
-        class="table">
-         <el-table-column :label="key" v-for ="(value,key) in tableData[0]"  :key="key" >
-            <template slot-scope="scope">
-                    <span>{{scope.row[key]}}</span>
-            </template>
+<template>
+  <div class="FieldTable esri-popup__main-container esri-widget esri-popup--shadow" style="width:1200px;height:500px;display:none">
+    <header class="esri-popup__header">
+      <h2 class="esri-popup__header-title" tabindex="0">
+        属性列表
+      </h2>
+      <div class="esri-popup__header-buttons">
+        <div role="button" tabindex="0" class="esri-popup__button" aria-label="关闭" title="关闭"  @click="close">
+          <span aria-hidden="true" class="esri-popup__icon esri-icon-close">
+          </span>
+        </div>
+      </div>
+    </header>
+    <div>
+      <el-table 
+      :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+      stripe
+      border
+      v-loading="loading"
+      size=small
+      height=350
+      style="width: 98%;margin:0 auto">
+        <el-table-column
+          type="index"
+          width="50">
+        </el-table-column>
+        <el-table-column
+          prop="XBH"
+          label="小班号">
+        </el-table-column>
+        <el-table-column
+          prop="DWMC"
+          label="县/区">
+        </el-table-column>
+        <el-table-column
+          prop="XIANG"
+          label="乡/街道">
+        </el-table-column>
+        <el-table-column
+          prop="CUN"
+          label="村/社区">
+        </el-table-column>
+        <el-table-column
+          prop="XBMJ"
+          width="150"
+          label="小班面积">
+        </el-table-column>
+        <el-table-column
+          prop="PD"
+          label="坡度">
+        </el-table-column>
+        <el-table-column
+          prop="HB"
+          width="150"                
+          label="海拔">
+        </el-table-column>
+        <el-table-column
+          prop="JD"
+          width="120"      
+          label="经度">
+        </el-table-column>
+        <el-table-column
+          prop="WD"
+          width="120"          
+          label="纬度">
+        </el-table-column>
+        <el-table-column
+          prop="LDQS"
+          label="林地权属">
+        </el-table-column>
+        <el-table-column
+          prop="LMQS"
+          label="林木权属">
+        </el-table-column>
+        <el-table-column
+          prop="DL"
+          width="100"                          
+          label="地类">
+        </el-table-column>
+        <el-table-column
+          prop="LL"
+          label="林龄">
+        </el-table-column>
+        <el-table-column
+          prop="QLLX"
+          width="100"                
+          label="群落类型">
+        </el-table-column>
+        <el-table-column
+          prop="ZLSJ"
+          label="造林时间">
+        </el-table-column>
+        <el-table-column
+          prop="ZLSJ"
+          label="造林时间">
+        </el-table-column>
+        <el-table-column
+          prop="ZLSJ"
+          label="造林时间">
+        </el-table-column>
+        <el-table-column
+          prop="SZJG"
+          label="树种组成">
+        </el-table-column>
+        <el-table-column
+          prop="YSSZ"
+          width="100"                          
+          label="优势树种">
+        </el-table-column>
+        <el-table-column
+          prop="PJSG"
+          label="平均树高">
+        </el-table-column>
+        <el-table-column
+          prop="PJXJ"
+          label="平均胸径">
+        </el-table-column>
+        <el-table-column
+          prop="HJSZ"
+          label="混交树种">
+        </el-table-column>
+        <el-table-column
+          prop="HJPJSG"
+          width="118"
+          label="混交树种平均树高">
+        </el-table-column>
+        <el-table-column
+          prop="HJPJXJ"
+          width="118"
+          label="混交树种平均胸径">
+        </el-table-column>
+        <el-table-column
+          prop="MMXJ"
+          label="每亩蓄积">
+        </el-table-column>
+        <el-table-column
+          prop="LZU"
+          label="龄组">
+        </el-table-column>
+        <el-table-column
+          prop="MMZS"
+          label="每亩株树">
+        </el-table-column>
+        <el-table-column
+          prop="YBD"
+          label="郁闭度">
+        </el-table-column>
+        <el-table-column
+          prop="SLJKDJ"
+          width="100"
+          label="森林健康等级">
+        </el-table-column>
+        <el-table-column
+          prop="QLJG"
+          width="100"                          
+          label="群落结构">
+        </el-table-column>
+        <el-table-column
+          prop="GMZL"
+          width="110"                          
+          label="灌木种类">
+        </el-table-column>
+        <el-table-column
+          prop="GMGD"
+          label="灌木盖度">
+        </el-table-column>
+        <el-table-column
+          prop="CBZL"
+          width="110"                         
+          label="草本种类">
+        </el-table-column>
+        <el-table-column
+          prop="CBGD"
+          label="草本盖度">
+        </el-table-column>
+        <el-table-column
+          prop="ZBGD"
+          label="植被盖度">
+        </el-table-column>
+        <el-table-column
+          prop="RWGR"
+          label="人为干扰">
+        </el-table-column>
+        <el-table-column
+          prop="YYGHCS"
+          width="100"
+          label="已有管护措施">
+        </el-table-column>
+        <el-table-column
+          prop="GHXS"
+          width="150"
+          label="管护形式/建议管护措施">
+        </el-table-column>
+         <el-table-column
+          fixed="right"
+          label="操作"
+          width="100">
+          <template slot-scope="scope">
+            <el-button type="text" size="small">编辑</el-button>
+          </template>
         </el-table-column>
       </el-table>
-      <div><el-button @click="open">测试</el-button></div>
+    </div>
+    <div style="width:98%;margin:0 auto;margin-top:20px">
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="pagesize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableData.length">
+      </el-pagination>     
+    </div>
+    <div style="margin:10px;10px;">
+      <el-button type="primary" size=small style="float:right">导出Excel</el-button>
+    </div>
   </div>
 </template>
 <script>
-import axios from "axios"
-import { getList } from '@/api/fieldBlock'
+import { getFormData } from '@/api/formData'
+import { fadeOut,fadeIn } from '@/utils/style'
 
 export default {
   data() {
     return {
       tableData:[],
       loading:true,
+      currentPage:1,
+      pagesize:20,
     }
   },
   props:[
-    "visible"
+    "fieldTableParam"
   ],
-  created() {
-    // this.fetchData()
+  watch:{
+     "fieldTableParam.visible":function(curVal,oldVal){
+       debugger;
+        fadeIn(fieldTb);
+        getFormData("XBInfo").then(response=>{
+          this.tableData = response.data
+          this.loading = false;
+        })
+     }
   },
-  methods: {
-    fetchData() {
-      this.loading = true
-      getList().then(response => {
-        // debugger;
-        this.tableData = response.data
-        this.loading = false
-      })
+  // mounted(){
+  //   getFormData("XBInfo").then(response=>{
+  //     this.tableData = response.data
+  //   })
+  // },
+  methods:{
+    handleSizeChange: function (size) {
+        this.pagesize = size;
     },
-    open() {
-      this.$emit('showbox','the msg'); //触发showbox方法，'the msg'为向父组件传递的数据
+    handleCurrentChange: function(currentPage){
+        this.currentPage = currentPage;
+    },
+    close(){
+      fieldTb.style.display = "none";
+      this.loading = true;
     }
-  },
+  }
 }
 </script>
-<style>
-.FieldTable{
-  /* position: absolute;
-  z-index: 9999 */
+<style scoped>
+.esri-popup__main-container {
+  max-height: 500px
+}
+
+.esri-view-height-large .esri-popup__main-container{
+  max-height: 500px   
+}
+
+.el-table__body-wrapper .is-scrolling-middle{
+  background-color: #a1a3a9;
+  border-radius: 3px;
+  width: 10px;
+  height: 10px;
 }
 </style>
+

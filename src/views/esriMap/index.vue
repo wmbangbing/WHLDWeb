@@ -1,15 +1,14 @@
 <template>
 <div>
- <div id="map">
+  <div id="map">
     <TaskSelector :taskSelectorParam=taskSelectorParam @returnXBH="getSelectedXBH" id="SelectedXBH"/>
     <ExpandTable :expandTableParam=expandTableParam  id="expandTb"/>
-    
- </div>
-  <!-- <FieldTable id="table" :visible=fieldTableVisible  /> -->
+    <FieldTable  :fieldTableParam=fieldTableParam  id="fieldTb"/>
+  </div>
   <!-- <SelectDialog @returnId="getSelectedId" :selectDialogParam=selectDialogParam   /> -->
   <!-- <ChartDialog  :chartParam=chartParam /> -->
   <PivottableDialog :pivottableParam=pivottableParam  />
-  <FieldTableDialog :fieldTableParam=fieldTableParam />
+  <!-- <QueryDialog /> -->
 </div>
  
 </template>
@@ -19,15 +18,11 @@ import FieldTable from '@/components/FieldTable'
 import SelectDialog from '@/components/SelectDialog' 
 import ChartDialog from '@/components/ChartDialog' 
 import PivottableDialog from '@/components/PivottableDialog' 
-import FieldTableDialog from '@/components/FieldTableDialog' 
 import TaskSelector from '@/components/TaskSelector' 
 import ExpandTable from '@/components/ExpandTable' 
+import QueryDialog from '@/components/QueryDialog' 
 import {createMap} from "./esriMap"
-import { getMPData } from '@/api/monitoringPoint'
 import { unique } from '@/utils/filterData'
-// import store from './store'
-
-
 
 export default  {
   name: 'EsriMap',
@@ -48,7 +43,6 @@ export default  {
       },
       fieldTableParam:{
         visible:false,
-        id:""
       },
       taskSelectorParam:{
         visible:false
@@ -69,9 +63,9 @@ export default  {
     SelectDialog,
     ChartDialog,
     PivottableDialog,
-    FieldTableDialog,
     TaskSelector,
-    ExpandTable
+    ExpandTable,
+    QueryDialog
   },
   mounted(){      
     var self = this;
