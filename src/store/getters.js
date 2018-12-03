@@ -12,7 +12,11 @@ const getters = {
     status: state => state.user.status,
     roles: state => state.user.roles,
     setting: state => state.user.setting,
-    definitionExpression:state => state.map.layer.definitionExpression
+    definitionExpression:state => state.map.layer.definitionExpression,
+    enXBInfo:state => state.xbInfo.enXBInfo,
+    cnXBInfo:state => state.xbInfo.cnXBInfo,
+    tableRow:state => state.tableRow.tableRow
+
     // errorLogs: state => state.errorLog.logs
   }
   export default getters

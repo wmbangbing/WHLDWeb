@@ -111,6 +111,7 @@ export const createMap = function (esriLoader, options, self) {
     //底图数组
     const basemaps = [ESRIVectorBasemap,ESRIRasterBasemap,vecBasemap, imgBasemap, gray];
 
+    //弹窗
     const GhcsAct = {
       title: "管护措施",
       id: "GHCS_id",
@@ -164,12 +165,11 @@ export const createMap = function (esriLoader, options, self) {
       }
     }) 
 
+    //地图
     const map = new Map({
       basemap: 'satellite',
       layers:[self.xbLayer]
     });
-
-    // var view = self.view;
 
     self.view = new MapView({
       map: map,
@@ -178,6 +178,7 @@ export const createMap = function (esriLoader, options, self) {
       center: [114.31, 30.59],
     });
 
+    //鼠标浮动
     var layerTooltip = createLayerTooltip();
 	
     self.view.on("pointer-move", function(event) {
@@ -255,6 +256,8 @@ export const createMap = function (esriLoader, options, self) {
       };
     }
     
+
+    //图层管理
     const layerList = new LayerList({
       view: self.view,
       listItemCreatedFunction:defineActions
@@ -311,8 +314,10 @@ export const createMap = function (esriLoader, options, self) {
         }
     };
 
-    self.view.when(function(){
+    self.view.when(function(){     
       self.taskSelectorParam.visible = true //任务查询可见
+      openUpload.style.display = "block";
+      renderer.style.display = "block";
 
       layerList.on("trigger-action", function(event) {
         var layer = event.item.layer; //被选图层
@@ -353,8 +358,44 @@ export const createMap = function (esriLoader, options, self) {
         position: "top-left",
         index: 1
       }])
+
+      // self.xbLayer.queryFeatures().then(function (results) {
+      //   var features = results.features;
+      //   var attributes = self.$store.getters.enXBInfo;
+      //   for(var feature of features){
+      //     if(feature.attributes.XBH == 1171028){
+      //       feature.attributes.XBMJ = 123456;
+      //     }else{
+      //       continue;
+      //     }
+      //   }
+
+      //   var rendererLayer = new FeatureLayer({
+      //     source:features,
+      //     fields: [],
+      //     outFields:["*"],
+      //     objectIdField: "FID",  // field name of the Object IDs
+      //     geometryType: "polygon",
+      //     title:"渲染图层",
+      //     popupTemplate: popupTemplate,
+      //     renderer:{
+      //       type: "simple", 
+      //       symbol: {
+      //         type: "simple-fill", 
+      //         size: 6,
+      //         color:[0, 255, 123, 0.1],
+      //         outline: { 
+      //           width: 0.5,
+      //           color: "red"
+      //         }
+      //       }
+      //     }
+      //   })
+      //   map.add(rendererLayer);
+      // })      
     })
 
+    //显示管护措施表格
     function GHTb(Id){
       self.expandTableParam.visible = !self.expandTableParam.visible;
       self.expandTableParam.task = null;   
@@ -368,6 +409,7 @@ export const createMap = function (esriLoader, options, self) {
       }
     });
 
+    //窗口组件
     const basemapGallery = new BasemapGallery({
       view: self.view,
       container: document.createElement("div"),
@@ -380,9 +422,9 @@ export const createMap = function (esriLoader, options, self) {
       expandIconClass: "esri-icon-basemap"
     });
 
-    const homeWidget = new Home({
-      view: self.view
-    });
+    // const homeWidget = new Home({
+    //   view: self.view
+    // });
 
     const compass = new Compass({
       view: self.view,
@@ -406,7 +448,7 @@ export const createMap = function (esriLoader, options, self) {
     const legend = new Legend({
       view: self.view,
       layerInfos: [{
-        // layer: dkLayer,
+        layer: self.xbLayer,
         title: "图例"
       }]
     })
@@ -414,16 +456,16 @@ export const createMap = function (esriLoader, options, self) {
     const taskExp = new Expand ({
       view: self.view,
       content: SelectedXBH,
-      expandIconClass: "esri-icon-polyline"
+      expandIconClass: "esri-icon-review"
     })
 
     self.view.ui.add([
       {
-        component: exp,
+        component: bgExpand,
         position: "top-right",
         index: 0
       },{
-        component: bgExpand,
+        component: exp,
         position: "top-right",
         index: 1
       },
@@ -432,11 +474,22 @@ export const createMap = function (esriLoader, options, self) {
         position: "top-right",
         index: 2
       },
-     {
+      {
         component: compass,
         position: "top-left",
         index: 2
-      },{
+      },
+      {
+        component: openUpload,
+        position: "top-left",
+        index: 4
+      },
+      {
+        component: renderer,
+        position: "top-left",
+        index: 5
+      },
+      {
         component: legend,
         position: "bottom-right",
         index: 0
@@ -460,7 +513,7 @@ export const createMap = function (esriLoader, options, self) {
       //   position: "bottom-left",
       //   index: 0
       // }
-    ]);
+    ]);  
   })
   .catch(err => {
     console.error(err);

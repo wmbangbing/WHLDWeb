@@ -1,5 +1,5 @@
 <template>
-  <div class="FieldTable esri-popup__main-container esri-widget esri-popup--shadow" style="width:1200px;height:500px;display:none">
+  <div class="FieldTable esri-popup__main-container esri-widget esri-popup--shadow" style="width:1200px;height:550px;display:none">
     <header class="esri-popup__header">
       <h2 class="esri-popup__header-title" tabindex="0">
         属性列表
@@ -12,11 +12,18 @@
       </div>
     </header>
     <div>
-      <el-table 
-      :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+      <div style="width:98%;margin:0 auto;margin-bottom:10px">
+        搜索： <el-input size=small v-model="search" style="width:200px" />
+        <el-button @click="openDownloadDialog" type="primary" size=small style="float:right">导出Excel</el-button>
+      </div>
+      <!-- :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)" -->
+      <el-table    
+      :data="datas.slice((this.currentPage-1)*this.pagesize,this.currentPage*this.pagesize)"
+      @row-click="rowClick"
       stripe
       border
       v-loading="loading"
+      element-loading-text="数据获取中..."
       size=small
       height=350
       style="width: 98%;margin:0 auto">
@@ -26,6 +33,7 @@
         </el-table-column>
         <el-table-column
           prop="XBH"
+          fixed
           label="小班号">
         </el-table-column>
         <el-table-column
@@ -191,16 +199,23 @@
           width="150"
           label="管护形式/建议管护措施">
         </el-table-column>
-         <el-table-column
+        <el-table-column
           fixed="right"
           label="操作"
           width="100">
+          <template slot="header" slot-scope="slot">
+            <el-input
+              v-model="search"
+              size="mini"
+              placeholder="Type to search"/>
+          </template>
           <template slot-scope="scope">
-            <el-button type="text" size="small">编辑</el-button>
+            <el-button type="text" size="small"  @click="handleUpdate(scope.row)">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
+
     <div style="width:98%;margin:0 auto;margin-top:20px">
       <el-pagination
       @size-change="handleSizeChange"
@@ -209,17 +224,14 @@
       :page-sizes="[10, 20, 50, 100]"
       :page-size="pagesize"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="tableData.length">
-      </el-pagination>     
-    </div>
-    <div style="margin:10px;10px;">
-      <el-button type="primary" size=small style="float:right">导出Excel</el-button>
+      :total="datas.length">
+      </el-pagination>    
     </div>
   </div>
 </template>
 <script>
 import { getFormData } from '@/api/formData'
-import { fadeOut,fadeIn } from '@/utils/style'
+import { fadeIn } from '@/utils/style'
 
 export default {
   data() {
@@ -228,6 +240,7 @@ export default {
       loading:true,
       currentPage:1,
       pagesize:20,
+      search:""
     }
   },
   props:[
@@ -235,12 +248,13 @@ export default {
   ],
   watch:{
      "fieldTableParam.visible":function(curVal,oldVal){
-       debugger;
         fadeIn(fieldTb);
-        getFormData("XBInfo").then(response=>{
-          this.tableData = response.data
-          this.loading = false;
-        })
+        // getFormData("XBInfo").then(response=>{
+        //   this.tableData = response.data
+        //   this.loading = false;
+        // })
+        this.tableData = this.$store.getters.enXBInfo;
+        this.loading = false;
      }
   },
   // mounted(){
@@ -248,6 +262,19 @@ export default {
   //     this.tableData = response.data
   //   })
   // },
+  computed:{
+    datas:function(){
+      const search = this.search;
+      if(search){
+        return this.tableData.filter(dataNews =>{
+          return Object.keys(dataNews).some(key =>{
+              return String(dataNews[key]).toLowerCase().indexOf(search) > -1        
+          })
+        })
+      }
+      return this.tableData
+    }
+  },
   methods:{
     handleSizeChange: function (size) {
         this.pagesize = size;
@@ -258,17 +285,27 @@ export default {
     close(){
       fieldTb.style.display = "none";
       this.loading = true;
+    },
+    handleUpdate(row){
+      this.$store.dispatch("SetTableRow",row);  
+      this.$emit('openRowEdit',true)
+    },
+    openDownloadDialog(){
+      this.$emit("openDownloadDialog")
+    },
+    rowClick(row, event, column){    
+      this.$emit("returnXBH",row.XBH)
     }
   }
 }
 </script>
 <style scoped>
 .esri-popup__main-container {
-  max-height: 500px
+  max-height: 800px
 }
 
 .esri-view-height-large .esri-popup__main-container{
-  max-height: 500px   
+  max-height: 800px   
 }
 
 .el-table__body-wrapper .is-scrolling-middle{

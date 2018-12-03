@@ -14,6 +14,7 @@
     <el-table
     :data="tableData"
     height="200"
+    v-loading="loading"
     style="width: 100%">      
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -126,6 +127,7 @@ export default {
           this.tableData = tableData;          
         }      
       }
+        this.loading = false;      
     },
     filterData(data){
       return data.TId === this.expandTableParam.task;

@@ -67,7 +67,6 @@ export default {
       this.visible = true;
       var PointArray = this.getPointArray();
       this.pointData = this.filterPointArray(PointArray,this.chartParam.field)
-      debugger;
       // this.initChart('NDVI');   
       this.$nextTick(function () {
         this.initChart('NDVI')                     

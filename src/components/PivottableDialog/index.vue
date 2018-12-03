@@ -4,7 +4,9 @@
     :visible="visible"
     @close='closeDialog'
     width="90%">
-    <el-scrollbar style="height:100%;"><div id="table" style="height:600px;"></div></el-scrollbar>   
+    <!-- <el-scrollbar style="height:100%;"> -->
+      <div id="table" style="height:600px;"></div>
+    <!-- </el-scrollbar>    -->
   </el-dialog>
 </template>
 <script>
@@ -35,7 +37,10 @@ export default{
       //     this.initPivottable(getFormData)    
       //   })
       // }  
-      this.initPivottable(getFormData)    
+      this.$nextTick(function () {
+          this.initPivottable(getFormData)    
+      })
+      // this.initPivottable(getFormData)    
     }
   },
   props:["pivottableParam"],
@@ -48,16 +53,22 @@ export default{
       this.visible = false;
     },
     initPivottable(fct){
-      var self = this;
-      fct("XBInfo").then(response => {
-        console.log(response)
-        $("#table").pivotUI(
-          response.data,{
-            renderers: self.renderers,
-          }
-        );
-      })
-
+      // var self = this;
+      // fct("XBInfo").then(response => {
+      //   console.log(response)
+      //   $("#table").pivotUI(
+      //     response.data,{
+      //       renderers: self.renderers,
+      //     }
+      //   );
+      // })
+      var data = this.$store.getters.cnXBInfo;
+      console.log($("#table"));
+      $("#table").pivotUI(
+        this.$store.getters.cnXBInfo,{
+          renderers: self.renderers,
+        }
+      );
     }
   }
 }

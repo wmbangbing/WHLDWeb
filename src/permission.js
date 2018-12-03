@@ -16,11 +16,16 @@ router.beforeEach((to, from, next) => {
       next({ path: '/' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
-      if (store.getters.roles.length === 0) {
+      if (store.getters.roles.length === 0) {      
         store.dispatch('GetUserInfo').then(res => { // 拉取用户信息
           const roles = res.data[0].Remark;
           store.dispatch('setxbLayerDefinition',roles); //根据用户权限设置可见区域
-          next()
+          store.dispatch("SetXBInfo").then(()=>{
+            
+          });          
+          next();
+          // store.dispatch('GetTask');
+          
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {
             Message.error(err || 'Verification failed, please login again')
