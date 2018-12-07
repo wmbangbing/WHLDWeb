@@ -1,13 +1,15 @@
-export const createMap = function (esriLoader, options, self) {
+export const createMap = function (esriLoader, options,panoramicJson, self) {
   esriLoader.loadModules(
     [
       'esri/Map',
       "esri/Basemap",
       "esri/Viewpoint",
+      "esri/Graphic",
       'esri/views/MapView',
       "esri/layers/FeatureLayer",
       "esri/layers/WebTileLayer",
       "esri/layers/TileLayer",
+      "esri/layers/GraphicsLayer",
       "esri/widgets/Expand",
       "esri/widgets/Home",
       "esri/widgets/LayerList",
@@ -22,10 +24,12 @@ export const createMap = function (esriLoader, options, self) {
       Map,
       Basemap,
       Viewpoint,
+      Graphic,
       MapView,
       FeatureLayer,
       WebTileLayer,
       TileLayer,
+      GraphicsLayer,
       Expand,
       Home,
       LayerList,
@@ -165,10 +169,33 @@ export const createMap = function (esriLoader, options, self) {
       }
     }) 
 
+    //360图层
+    var gralayer = new GraphicsLayer({
+      title:"360全景点"
+    });
+    const markerSymbol = {
+      type: "simple-marker", 
+      color: [226, 119, 40],
+      outline: {
+        color: [255, 255, 255],
+        width: 2
+      }
+    };
+
+    for(let i=0;i<panoramicJson.length;i++){
+      gralayer.add(createGraphic(panoramicJson[i]));
+    }
+    
+    function createGraphic(data){
+      var graphic =  new Graphic(data);
+      graphic.symbol = markerSymbol;
+       return graphic;
+    }
+
     //地图
     const map = new Map({
       basemap: 'satellite',
-      layers:[self.xbLayer]
+      layers:[self.xbLayer,gralayer]
     });
 
     self.view = new MapView({
@@ -341,6 +368,30 @@ export const createMap = function (esriLoader, options, self) {
           self.pivottableParam.visible = !self.pivottableParam.visible;
         }
       })
+
+      //360全景图片
+      var arr = [];
+      panoramicJson.map(function(dt){
+        arr.push(dt.attributes.imgID)
+      });
+
+      self.view.on("click", function (event) {
+        var screenPoint = {
+            x: event.x,
+            y: event.y
+        };
+     
+        self.view.hitTest(screenPoint).then(function (response) {
+           if (response.results.length) {
+              var graphic = response.results.filter(function (result) {
+              return result.graphic.layer === gralayer;
+            })[0].graphic;
+            console.log(graphic.attributes.imgID);
+            self.PhotoSphereViewerParam.visible = !self.PhotoSphereViewerParam.visible;
+            self.PhotoSphereViewerParam.imgID = graphic.attributes.imgID;
+         }
+        }); 	
+      });
     });
 
     self.xbLayer.when(()=>{

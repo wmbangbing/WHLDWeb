@@ -14,6 +14,7 @@
   <DownloadDialog :DownloadParam=DownloadParam />
   <row-edit :rowEditParam=rowEditParam />
   <RendererDialog @renderer="rendererXBLayer" :rendererParam=rendererParam />
+  <PhotoSphereViewerDialog :PhotoSphereViewerParam=PhotoSphereViewerParam />
   <!-- <QueryDialog /> -->
 </div>
  
@@ -30,7 +31,9 @@ import RowEdit from '@/components/RowEdit'
 import UploadTaskDialog from '@/components/UploadTaskDialog' 
 import DownloadDialog from '@/components/DownloadDialog' 
 import RendererDialog from '@/components/RendererDialog' 
+import PhotoSphereViewerDialog from '@/components/PhotoSphereViewerDialog' 
 import {createMap} from "./esriMap"
+import panoramicJson from "@/assets/json/panoramic.json"
 // import { unique } from '@/utils/filterData'
 
 export default  {
@@ -72,6 +75,10 @@ export default  {
       rendererParam:{
         visible:false
       },
+      PhotoSphereViewerParam:{
+        visible:false,
+        imgID:""
+      },
       selectId:[],
       xbLayer:undefined,
       view:undefined,
@@ -88,7 +95,8 @@ export default  {
     RowEdit,
     UploadTaskDialog,
     DownloadDialog,
-    RendererDialog
+    RendererDialog,
+    PhotoSphereViewerDialog
   },
   mounted(){      
     var self = this;
@@ -100,7 +108,7 @@ export default  {
         url: 'http://202.114.148.160/arcgis_js_api4.8/library/4.8/dojo/dojo.js',
         // url:'https://js.arcgis.com/4.9/'
       };
-      createMap(esriLoader,options,self)
+      createMap(esriLoader,options,panoramicJson,self)
     },
     getSelectedXBH(value){
       this.expandTableParam.visible = !this.expandTableParam.visible;

@@ -5,14 +5,15 @@
     @close='closeDialog'
     width="90%">
     <!-- <el-scrollbar style="height:100%;"> -->
-      <div id="table" style="height:600px;"></div>
+      <div id="table" style="height:1000px;"></div>
     <!-- </el-scrollbar>    -->
   </el-dialog>
 </template>
 <script>
 import $ from 'jquery'
 import jqueryui from 'jqueryui'
-import pivottable from 'pivottable'
+import pivottable from 'pivottable';
+import "pivottable/dist/pivot.min.css";
 import d3 from 'd3'
 import c3 from 'c3'
 import {c3_renderers} from "./c3_renderers"
@@ -77,13 +78,15 @@ export default{
 .el-dialog{
   display:flex;
   flex-direction:column;
-  max-height:calc(100% - 200px);
+  max-height:calc(100% - 50px);
   max-width:calc(100% - 200px);
 }
 
 .el-dialog > .el-dialog__body{
   overflow:auto
 }   
-@import url("https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.20.0/pivot.min.css");
+/* @import url("https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.20.0/pivot.min.css"); */
+/* @import url("https://cdn.bootcss.com/pivottable/2.20.0/pivot.min.css"); */
+
 </style>
 
