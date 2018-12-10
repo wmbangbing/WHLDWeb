@@ -38,7 +38,8 @@
     },
     methods:{
       downloadExcel(){
-        window.location.href = "http://202.114.148.160/WHLDWebApi/api/downloadexcel";
+        // window.location.href = "http://223.255.43.21/whldwebapi/api/downloadexcel";
+        window.location.href = "http://202.114.148.160/whldwebapi/api/downloadexcel";
       },
       closeDialog(){
         this.visible = false;

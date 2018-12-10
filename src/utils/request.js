@@ -6,6 +6,7 @@ import { getToken } from '@/utils/auth'
 // create an axios instance
 const service = axios.create({
   // baseURL: process.env.BASE_API, // api 的 base_url
+  // baseURL: "http://223.255.43.21/WHLDWebApi/api/", // api 的 base_url
   baseURL: "http://202.114.148.160/WHLDWebApi/api/", // api 的 base_url
   timeout: 5000 // request timeout
 })

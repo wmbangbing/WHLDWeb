@@ -14,10 +14,13 @@ import $ from 'jquery'
 import jqueryui from 'jqueryui'
 import pivottable from 'pivottable';
 import "pivottable/dist/pivot.min.css";
-import d3 from 'd3'
-import c3 from 'c3'
-import {c3_renderers} from "./c3_renderers"
+// import c3 from 'c3'
+// import "pivottable/dist/c3_renderers.min.js"
+import "pivottable/dist/plotly_renderers.min.js"
+import "pivottable/dist/pivot.zh.js"
+
 import { getFormData } from '@/api/formData'
+
 
 export default{
   data(){
@@ -46,8 +49,11 @@ export default{
   },
   props:["pivottableParam"],
   created(){
-      c3_renderers.call(this,$,c3)
-      var renderers = $.extend($.pivotUtilities.renderers,$.pivotUtilities.c3_renderers);
+    // var derivers = $.pivotUtilities.derivers;
+    // var renderers = $.extend($.pivotUtilities.renderers,
+    //     $.pivotUtilities.plotly_renderers);
+      
+      // var renderers = $.extend($.pivotUtilities.renderers,$.pivotUtilities.c3_renderers);
   },
   methods:{
     closeDialog(){
@@ -63,11 +69,20 @@ export default{
       //     }
       //   );
       // })
+      var derivers = $.pivotUtilities.derivers;
+      // var renderers = $.extend($.pivotUtilities.renderers,
+      //     $.pivotUtilities.c3_renderers);
+      var renderers = $.extend($.pivotUtilities.renderers,
+          $.pivotUtilities.plotly_renderers);
+
+      // renderers = $.pivotUtilities.locales.zh.renderers;
+
       var data = this.$store.getters.cnXBInfo;
-      console.log($("#table"));
       $("#table").pivotUI(
         this.$store.getters.cnXBInfo,{
-          renderers: self.renderers,
+          renderers: $.pivotUtilities.locales.zh.renderers,
+          aggregators:$.pivotUtilities.locales.zh.aggregators,
+          localeStrings:$.pivotUtilities.locales.zh.localeStrings
         }
       );
     }

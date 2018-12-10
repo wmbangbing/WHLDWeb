@@ -36,7 +36,8 @@ export const constantRouterMap = [
         meta: { title: '二维', icon: '2dmap' }
       },
       {
-        "path": "http://202.114.148.160/qctest/TreeTest/?tdsourcetag=s_pctim_aiomsg",
+        // "path": "http://223.255.43.21/treeTest",
+        "path": "http://202.114.148.160/treeTest",
         // path: 'sceneview',
         // name: 'SceneView',
         // component: () => import('@/views/esriScene/index'),

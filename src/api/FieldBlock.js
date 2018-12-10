@@ -2,7 +2,8 @@ import request from '@/utils/request'
 
 export function getList(params) {
   return request({
-    url: 'http://202.114.148.160/webapi/api/values',
+    // url: 'http://223.255.43.21/webapi/api/values',
+    url: 'values',
     method: 'get',
     params
   })

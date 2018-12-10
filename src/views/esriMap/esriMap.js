@@ -41,7 +41,7 @@ export const createMap = function (esriLoader, options,panoramicJson, self) {
     ]) => {
 
     urlUtils.addProxyRule({
-      urlPrefix: "http://202.114.148.160/arcgis_js_api4.8",
+      urlPrefix: "http://202.114.148.160//arcgis_js_api4.8",
       proxyUrl: "http://202.114.148.160/DotNet/proxy.ashx"
     });
 
@@ -150,6 +150,7 @@ export const createMap = function (esriLoader, options,panoramicJson, self) {
     //基础图层
     self.xbLayer = new FeatureLayer({
       url:"http://202.114.148.160:8000/arcgis/rest/services/LinYeMapService/whld_2018/MapServer/0",
+      // url:"http://223.255.43.21:6080/arcgis/rest/services/WHLD_Group/WHLD/MapServer",
       outFields:["*"],
       visible: true,
       title:"小班图层",
@@ -486,6 +487,7 @@ export const createMap = function (esriLoader, options,panoramicJson, self) {
 
     const print = new Print({
       view: self.view,
+      // printServiceUrl:"http://223.255.43.21:6080/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
       printServiceUrl:"http://202.114.148.160:8000/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task",
       container: document.createElement("div")  
     })
